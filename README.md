@@ -3,4 +3,5 @@
 - pyqt => 5.6
 
 # Screenshot
-![screenshot](http://ozhtfx691.bkt.clouddn.com/github/bwh_controllerFY4550887~%60S%605WVVDO3@CS.png)
+![](http://ozhtfx691.bkt.clouddn.com/1521792119%281%29.png)
+![](http://ozhtfx691.bkt.clouddn.com/1521791893%281%29.png)
