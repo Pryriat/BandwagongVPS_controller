@@ -91,7 +91,7 @@ class bwh_controls(QWidget):
             self.start_lab.setText("Start failed, error code = %d"%(self.start_data['error']))
             self.start_lab.setVisible(True)
     def stop_event(self):
-        self.timer.timeout.connect(lambda:self.label_event(self,self.stop_lab))
+        self.timer.timeout.connect(lambda:self.label_event(self.stop_lab))
         self.timer.start(10*1000)
         self.stop_data = requests.get(self.TAR+'stop',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.stop_data['error'] == 0):
@@ -100,7 +100,7 @@ class bwh_controls(QWidget):
             self.stop_lab.setText("Stop failed, error code = %d"%(stop_data['error']))
             self.stop_lab.setVisible(True)
     def kill_event(self):
-        self.timer.timeout.connect(lambda:self.label_event(self,self.kill_lab))
+        self.timer.timeout.connect(lambda:self.label_event(self.kill_lab))
         self.timer.start(10*1000)
         self.kill_data = requests.get(self.TAR+'kill',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.restart_data['error'] == 0):
