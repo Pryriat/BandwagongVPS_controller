@@ -31,14 +31,13 @@ class bwh_stat(QWidget):
         self.live_res=['ve_status','ve_mac1','disk_usage','ram_stat','swap_stat','ssh_port']
         self.info_data = requests.get(self.info_url,headers=self.head,params=self.web_payload,timeout=500).json()
         self.live_data = requests.get(self.live_url,headers=self.head,params=self.web_payload,timeout=500).json()
-        print(self.live_data['mem_available_kb'])
         num = range(0,len(self.info_res))
         self.MainLayout = QVBoxLayout()
         self.res_layout = QHBoxLayout()
         self.res_layout.addWidget(self.res_label,Qt.AlignRight)
         self.res_layout.addWidget(self.res_button,Qt.AlignRight)
         self.res_layout.setContentsMargins(600,0,0,0)
-                                       
+        self.status = self.live_data['ve_status']                               
         self.ft = QFont()
         self.ft.setPointSize(15)
         self.label_dict={}
@@ -52,9 +51,13 @@ class bwh_stat(QWidget):
             label1.setMinimumWidth(200)
             if x == 'data_usage':
                 label2 = QProgressBar(self)
-                label2.setValue(int(self.info_data['data_counter']/self.info_data['plan_monthly_data']*100))
-                label2.setFormat('%sG / %sG'%(str(round(self.info_data['data_counter']/1024/1024/1024,2)),str(round(self.info_data['plan_monthly_data']/1024/1024/1024,2))))
-                label2.setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    label2.setValue(int(self.info_data['data_counter']/self.info_data['plan_monthly_data']*100))
+                    label2.setFormat('%sG / %sG'%(str(round(self.info_data['data_counter']/1024/1024/1024,2)),str(round(self.info_data['plan_monthly_data']/1024/1024/1024,2))))
+                    label2.setAlignment(Qt.AlignRight)
+                else:
+                    label2.setValue(0)
+                    label2.setFormat('%s'%('VPS Stopped'))
             elif x == 'ip_addresses':
                 label2 = QLabel(str(self.info_data[x][0]),self)
             else:
@@ -76,21 +79,33 @@ class bwh_stat(QWidget):
             label1.setMinimumWidth(200)
             if x == 'disk_usage':
                 label2 = QProgressBar(self)
-                label2.setValue(int(self.live_data['ve_used_disk_space_b']/self.info_data['plan_disk']*100))
-                label2.setFormat('%sG / %sG'%(str(round(self.live_data['ve_used_disk_space_b']/1024/1024/1024,2)),str(round(self.live_data['plan_disk']/1024/1024/1024,2))))
-                label2.setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    label2.setValue(int(self.live_data['ve_used_disk_space_b']/self.info_data['plan_disk']*100))
+                    label2.setFormat('%sG / %sG'%(str(round(self.live_data['ve_used_disk_space_b']/1024/1024/1024,2)),str(round(self.live_data['plan_disk']/1024/1024/1024,2))))
+                    label2.setAlignment(Qt.AlignRight)
+                else:
+                    label2.setValue(0)
+                    label2.setFormat('%s'%('VPS Stopped'))
             elif x == 'ram_stat':
                 label2 = QProgressBar(self)
-                label2.setValue(int((float(self.live_data['plan_ram']/1024-self.live_data['mem_available_kb'])/float(self.live_data['plan_ram']/1024))*100))
-                label2.setFormat('%sM / %sM'%(str(round((self.live_data['plan_ram']/1024/1024-self.live_data['mem_available_kb']/1024),2)),str(round(self.live_data['plan_ram']/1024/1024,2))))
-                label2.setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    label2.setValue(int((float(self.live_data['plan_ram']/1024-self.live_data['mem_available_kb'])/float(self.live_data['plan_ram']/1024))*100))
+                    label2.setFormat('%sM / %sM'%(str(round((self.live_data['plan_ram']/1024/1024-self.live_data['mem_available_kb']/1024),2)),str(round(self.live_data['plan_ram']/1024/1024,2))))
+                    label2.setAlignment(Qt.AlignRight)
+                else:
+                    label2.setValue(0)
+                    label2.setFormat('%s'%('VPS Stopped'))
             elif x == 'swap_stat':
                 label2 = QProgressBar(self)
-                label2.setValue(int( ((self.live_data['swap_total_kb'] - self.live_data['swap_available_kb']) /self.live_data['swap_total_kb'])*100 ))
-                label2.setFormat('%sM / %sM'%(str(round(self.live_data['swap_total_kb']/1024 - self.live_data['swap_available_kb']/1024,2)),str(round(self.live_data['swap_total_kb']/1024,2))))
+                if self.status != 'Stopped':
+                    label2.setValue(int( ((self.live_data['swap_total_kb'] - self.live_data['swap_available_kb']) /self.live_data['swap_total_kb'])*100 ))
+                    label2.setFormat('%sM / %sM'%(str(round(self.live_data['swap_total_kb']/1024 - self.live_data['swap_available_kb']/1024,2)),str(round(self.live_data['swap_total_kb']/1024,2))))
+                    label2.setAlignment(Qt.AlignRight)
+                else:
+                    label2.setValue(0)
+                    label2.setFormat('%s'%('VPS Stopped'))
             else:
                 label2 = QLabel(str(self.live_data[x]),self)
-                
             label2.setFont(self.ft)
             label2.setMinimumWidth(50)
             tmplayout.setWidget(y,QFormLayout.LabelRole,label1)
@@ -106,34 +121,53 @@ class bwh_stat(QWidget):
 
     def update_data(self):
         self.res_label.setVisible(True)
-        self.timer.start(20*1000)
+        self.timer.start(10*1000)
         self.info_data = requests.get(self.info_url,headers=self.head,params=self.web_payload,timeout=500).json()
         self.live_data = requests.get(self.live_url,headers=self.head,params=self.web_payload,timeout=500).json()
+        self.status = self.live_data['ve_status'] 
         num = range(0,len(self.info_res))
         for (x,y) in zip(self.info_res, num):
             if x == 'data_usage':
-                self.label_dict[x].setValue(int(self.info_data['data_counter']/self.info_data['plan_monthly_data']*100))
-                self.label_dict[x].setFormat('%sG / %sG'%(str(round(self.info_data['data_counter']/1024/1024/1024,2)),str(round(self.info_data['plan_monthly_data']/1024/1024/1024,2))))
-                self.label_dict[x].setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    self.label_dict[x].setValue(int(self.info_data['data_counter']/self.info_data['plan_monthly_data']*100))
+                    self.label_dict[x].setFormat('%sG / %sG'%(str(round(self.info_data['data_counter']/1024/1024/1024,2)),str(round(self.info_data['plan_monthly_data']/1024/1024/1024,2))))
+                    self.label_dict[x].setAlignment(Qt.AlignRight)
+                else:
+                    self.label_dict[x].setValue(0)
+                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
             elif x == 'ip_addresses':
                 self.label_dict[x].setText(str(self.info_data[x][0]))
-            else:
+            else :
                 self.label_dict[x].setText(str(self.info_data[x]))
-
         num = range(0,len(self.live_res))
         for (x,y) in zip(self.live_res, num):
             if x == 'disk_usage':
-                self.label_dict[x] .setValue(int(self.live_data['ve_used_disk_space_b']/self.info_data['plan_disk']*100))
-                self.label_dict[x] .setFormat('%sG / %sG'%(str(round(self.live_data['ve_used_disk_space_b']/1024/1024/1024,2)),str(round(self.live_data['plan_disk']/1024/1024/1024,2))))
-                self.label_dict[x] .setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    self.label_dict[x] .setValue(int(self.live_data['ve_used_disk_space_b']/self.info_data['plan_disk']*100))
+                    self.label_dict[x] .setFormat('%sG / %sG'%(str(round(self.live_data['ve_used_disk_space_b']/1024/1024/1024,2)),str(round(self.live_data['plan_disk']/1024/1024/1024,2))))
+                    self.label_dict[x] .setAlignment(Qt.AlignRight)
+                else:
+                    self.label_dict[x].setValue(0)
+                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
             elif x == 'ram_stat':
-                self.label_dict[x] .setValue(int((float(self.live_data['plan_ram']/1024-self.live_data['mem_available_kb'])/float(self.live_data['plan_ram']/1024))*100))
-                self.label_dict[x] .setFormat('%sM / %sM'%(str(round((self.live_data['plan_ram']/1024/1024-self.live_data['mem_available_kb']/1024),2)),str(round(self.live_data['plan_ram']/1024/1024,2))))
-                self.label_dict[x] .setAlignment(Qt.AlignRight)
+                if self.status != 'Stopped':
+                    self.label_dict[x] .setValue(int((float(self.live_data['plan_ram']/1024-self.live_data['mem_available_kb'])/float(self.live_data['plan_ram']/1024))*100))
+                    self.label_dict[x] .setFormat('%sM / %sM'%(str(round((self.live_data['plan_ram']/1024/1024-self.live_data['mem_available_kb']/1024),2)),str(round(self.live_data['plan_ram']/1024/1024,2))))
+                    self.label_dict[x] .setAlignment(Qt.AlignRight)
+                else:
+                    self.label_dict[x].setValue(0)
+                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
             elif x == 'swap_stat':
-                self.label_dict[x]  = QProgressBar(self)
-                self.label_dict[x] .setValue(int( ((self.live_data['swap_total_kb'] - self.live_data['swap_available_kb']) /self.live_data['swap_total_kb'])*100 ))
-                self.label_dict[x] .setFormat('%sM / %sM'%(str(round(self.live_data['swap_total_kb']/1024 - self.live_data['swap_available_kb']/1024,2)),str(round(self.live_data['swap_total_kb']/1024,2))))
+                if self.status != 'Stopped':
+                    if self.live_data['swap_total_kb'] is None or self.live_data['swap_available_kb'] is None:
+                        self.label_dict[x].setValue(0)
+                        self.label_dict[x].setFormat('%s'%('SWAP Unloaded'))
+                    else:
+                        self.label_dict[x] .setValue(int( ((self.live_data['swap_total_kb'] - self.live_data['swap_available_kb']) /self.live_data['swap_total_kb'])*100 ))
+                        self.label_dict[x] .setFormat('%sM / %sM'%(str(round(self.live_data['swap_total_kb']/1024 - self.live_data['swap_available_kb']/1024,2)),str(round(self.live_data['swap_total_kb']/1024,2))))
+                else:
+                    self.label_dict[x].setValue(0)
+                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
             else:
                self.label_dict[x].setText(str(self.live_data[x]))
         self.update()

@@ -13,6 +13,7 @@ class bwh_controls(QWidget):
         self.TAR = TAR
         self.head = head
         self.web_payload = web_payload
+        self.timer = QTimer(self)
         self.initUI()
     def initUI(self):
         self.shell_url = self.TAR+'basicShell/exec'
@@ -72,6 +73,8 @@ class bwh_controls(QWidget):
 
         self.setLayout(self.mainlayout)
     def restart_event(self):
+        self.timer.timeout.connect(lambda:self.label_event(self.restart_lab))
+        self.timer.start(10*1000)
         self.restart_data = requests.get(self.TAR+'restart',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.restart_data['error'] == 0):
             self.restart_lab.setVisible(True)
@@ -79,6 +82,8 @@ class bwh_controls(QWidget):
             self.restart_lab.setText("Restart failed, error code = %d"%(self.restart_data['error']))
             self.restart_lab.setVisible(True)
     def start_event(self):
+        self.timer.timeout.connect(lambda:self.label_event(self.start_lab))
+        self.timer.start(10*1000)
         self.start_data = requests.get(self.TAR+'start',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.start_data['error'] == 0):
             self.start_lab.setVisible(True)
@@ -86,18 +91,22 @@ class bwh_controls(QWidget):
             self.start_lab.setText("Start failed, error code = %d"%(self.start_data['error']))
             self.start_lab.setVisible(True)
     def stop_event(self):
+        self.timer.timeout.connect(lambda:self.label_event(self,self.stop_lab))
+        self.timer.start(10*1000)
         self.stop_data = requests.get(self.TAR+'stop',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.stop_data['error'] == 0):
             self.stop_lab.setVisible(True)
         else:
-            self.stop_lab.setText("Stop failed, error code = %d"%(self.stop_data['error']))
+            self.stop_lab.setText("Stop failed, error code = %d"%(stop_data['error']))
             self.stop_lab.setVisible(True)
     def kill_event(self):
+        self.timer.timeout.connect(lambda:self.label_event(self,self.kill_lab))
+        self.timer.start(10*1000)
         self.kill_data = requests.get(self.TAR+'kill',headers=self.head,params=self.web_payload,timeout=500).json()
         if(self.restart_data['error'] == 0):
             self.kill_lab.setVisible(True)
         else:
-            self.kill_lab.setText("Kill failed, error code = %d"%(self.restart_data['error']))
+            self.kill_lab.setText("Kill failed, error code = %d"%(restart_data['error']))
             self.kill_lab.setVisible(True)
     def shell_event(self):
         script = self.shell_input.text()
@@ -111,3 +120,7 @@ class bwh_controls(QWidget):
         else:
             self.shell_output.insertPlainText("Error!\n, Error_code : %d"%(data['error']))
         self.shell_output.moveCursor(QTextCursor.End)
+
+    def label_event(self,label):
+        label.setVisible(False)
+
