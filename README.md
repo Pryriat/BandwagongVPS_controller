@@ -18,6 +18,7 @@
 - ~~regularly data update~~（refresh button accomplished) 
 - reinstall OS
 - backup vps
+- multi-user
 
 # Attention: for bandwagonhost VPS only
 
