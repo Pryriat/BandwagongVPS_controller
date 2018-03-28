@@ -26,7 +26,7 @@
 ## login
 ![](http://ozhtfx691.bkt.clouddn.com/FSQ$U%7B%5DEQ@5_CF%7BY%288%7DTTLC.png)
 ## status
-![](http://ozhtfx691.bkt.clouddn.com/@MLXM%7BPB8%28%7D%289AW3%2801$BQ5.png)
+![](http://ozhtfx691.bkt.clouddn.com/1522210984%281%29.png)
 ## basic control
 ![](http://ozhtfx691.bkt.clouddn.com/1521791893%281%29.png)
 
