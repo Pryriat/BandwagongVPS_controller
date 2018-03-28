@@ -18,6 +18,7 @@ class bwh_stat(QWidget):
         self.initUI()
     def initUI(self):
         self.timer.timeout.connect(self.res_label_event)
+        self.setStyleSheet('QProgressBar::chunk{background:rgb(153, 204, 255)}QProgressBar{text-align:center;}')
         self.res_button=QPushButton("Refresh")
         self.res_label=QLabel("Refresh success.")
         self.res_label.setVisible(False)
