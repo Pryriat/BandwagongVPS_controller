@@ -41,7 +41,5 @@ web_payload= {'api_key':data['api'],'veid':data['veid']}
 file.close()
 ma = mainwindow(TAR,head,web_payload)
 ma.show()
-if stat == 3:
-    sys.exit()
 sys.exit(app.exec())
 
