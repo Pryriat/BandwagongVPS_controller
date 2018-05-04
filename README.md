@@ -22,6 +22,10 @@
 
 # Attention: for bandwagonhost VPS only
 
+# Tips
+- Get VEID and API_KEY from KiwiVM
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/@3RWGK_PXXT2F7$3BRZ%28XAJ.png)
+
 # Screenshot
 ## login
 ![](http://ozhtfx691.bkt.clouddn.com/FSQ$U%7B%5DEQ@5_CF%7BY%288%7DTTLC.png)
