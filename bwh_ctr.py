@@ -23,21 +23,21 @@ class bwh_controls(QWidget):
         self.mainlayout = QGridLayout()
 
         self.lft_layout.setFormAlignment(Qt.AlignAbsolute)
-        self.start_btn = QPushButton("Start")
+        self.start_btn = QPushButton(self.tr("Start"))
         self.start_btn.resize(50,50)
-        self.start_lab = QLabel("Start success")
+        self.start_lab = QLabel(self.tr("Start success"))
         self.start_lab.setVisible(False)
-        self.stop_btn = QPushButton("Stop")
-        self.stop_lab = QLabel("Stop success")
+        self.stop_btn = QPushButton(self.tr("Stop"))
+        self.stop_lab = QLabel(self.tr("Stop success"))
         self.stop_lab.setVisible(False)
-        self.kill_btn = QPushButton("Kill")
-        self.kill_lab = QLabel("Kill success")
+        self.kill_btn = QPushButton(self.tr("Kill"))
+        self.kill_lab = QLabel(self.tr("Kill success"))
         self.kill_lab.setVisible(False)
-        self.restart_btn = QPushButton("Restart")
-        self.restart_lab = QLabel("Restart success")
+        self.restart_btn = QPushButton(self.tr("Restart"))
+        self.restart_lab = QLabel(self.tr("Restart success"))
         self.restart_lab.setVisible(False)
-        self.shell_label = QLabel("Basic shell")
-        self.shell_btn = QPushButton("Send")
+        self.shell_label = QLabel(self.tr("Basic shell"))
+        self.shell_btn = QPushButton(self.tr("Send"))
         self.shell_output = QTextEdit()
         self.shell_input = QLineEdit()
         self.shell_output.setReadOnly(True)
@@ -79,7 +79,7 @@ class bwh_controls(QWidget):
         if(self.restart_data['error'] == 0):
             self.restart_lab.setVisible(True)
         else:
-            self.restart_lab.setText("Restart failed, error code = %d"%(self.restart_data['error']))
+            self.restart_lab.setText(self.tr("Restart failed, error code = %d"%(self.restart_data['error'])))
             self.restart_lab.setVisible(True)
     def start_event(self):
         self.timer.timeout.connect(lambda:self.label_event(self.start_lab))
@@ -88,7 +88,7 @@ class bwh_controls(QWidget):
         if(self.start_data['error'] == 0):
             self.start_lab.setVisible(True)
         else:
-            self.start_lab.setText("Start failed, error code = %d"%(self.start_data['error']))
+            self.start_lab.setText(self.tr("Start failed, error code = %d"%(self.start_data['error'])))
             self.start_lab.setVisible(True)
     def stop_event(self):
         self.timer.timeout.connect(lambda:self.label_event(self.stop_lab))
@@ -97,7 +97,7 @@ class bwh_controls(QWidget):
         if(self.stop_data['error'] == 0):
             self.stop_lab.setVisible(True)
         else:
-            self.stop_lab.setText("Stop failed, error code = %d"%(stop_data['error']))
+            self.stop_lab.setText(self.tr("Stop failed, error code = %d"%(stop_data['error'])))
             self.stop_lab.setVisible(True)
     def kill_event(self):
         self.timer.timeout.connect(lambda:self.label_event(self.kill_lab))
@@ -106,7 +106,7 @@ class bwh_controls(QWidget):
         if(self.restart_data['error'] == 0):
             self.kill_lab.setVisible(True)
         else:
-            self.kill_lab.setText("Kill failed, error code = %d"%(restart_data['error']))
+            self.kill_lab.setText(self.tr("Kill failed, error code = %d"%(restart_data['error'])))
             self.kill_lab.setVisible(True)
     def shell_event(self):
         script = self.shell_input.text()
@@ -118,9 +118,8 @@ class bwh_controls(QWidget):
         if data['error'] == 0:
             self.shell_output.insertPlainText(data['message']+'\n')
         else:
-            self.shell_output.insertPlainText("Error!\n, Error_code : %d"%(data['error']))
+            self.shell_output.insertPlainText(self.tr("Error!\n, Error_code : %d"%(data['error'])))
         self.shell_output.moveCursor(QTextCursor.End)
 
     def label_event(self,label):
         label.setVisible(False)
-

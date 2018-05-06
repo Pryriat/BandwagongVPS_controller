@@ -15,23 +15,50 @@ class res_gui(QThread):
         self.up.emit()
 
 class bwh_stat(QWidget):
-    def __init__(self,TAR,head,payload):
+    def __init__(self,TAR,head,payload,trans):
         super().__init__()
         self.TAR = TAR
+        self.trans = trans
         self.head = head
         self.web_payload = payload
         self.timer = QTimer(self)
         self.auto_res = QTimer(self)
         self.res_thread = res_gui()
         self.initUI()
+
+    def trans_label(self):
+        for key in self.text_dict.keys():
+            if key == 'ip_addresses':
+                self.text_dict[key].setText("IP地址")
+            elif key == 'node_location':
+                self.text_dict[key].setText("VPS节点位置")
+            elif key == 'os':
+                self.text_dict[key].setText("操作系统")
+            elif key == 'plan':
+                self.text_dict[key].setText("VPS类型")
+            elif key == 'data_usage':
+                self.text_dict[key].setText("流量使用情况")
+            elif key == 've_status':
+                self.text_dict[key].setText("VPS状态")
+            elif key == 've_mac1':
+                self.text_dict[key].setText("MAC地址")
+            elif key == 'disk_usage':
+                self.text_dict[key].setText("存储使用情况")
+            elif key == 'ram_stat':
+                self.text_dict[key].setText("内存使用情况")
+            elif key == 'swap_stat':
+                self.text_dict[key].setText("交换分区使用情况")
+            elif key == 'ssh_port':
+                self.text_dict[key].setText("SSH端口")
+
     def initUI(self):
         self.timer.timeout.connect(self.res_label_event)
         self.auto_res.timeout.connect(self.start_update)
         self.auto_res.start(60*1000)
         self.res_thread.up.connect(self.update_data)
         self.setStyleSheet('QProgressBar::chunk{background:rgb(153, 204, 255)}QProgressBar{text-align:center;}')
-        self.res_button=QPushButton("Refresh")
-        self.res_label=QLabel("Success.")
+        self.res_button=QPushButton(self.tr("Refresh"))
+        self.res_label=QLabel(self.tr("Success."))
         self.res_label.setVisible(False)
         self.get_info = 'getServiceInfo'
         self.get_live_info = 'getLiveServiceInfo'
@@ -49,16 +76,17 @@ class bwh_stat(QWidget):
         self.res_layout.addWidget(self.res_label,Qt.AlignRight)
         self.res_layout.addWidget(self.res_button,Qt.AlignRight)
         self.res_layout.setContentsMargins(450,0,0,0)
-        self.status = self.live_data['ve_status']                               
+        self.status = self.live_data['ve_status']
         self.ft = QFont()
         self.ft.setPointSize(15)
         self.label_dict={}
+        self.text_dict={}
         self.res_button.clicked.connect(self.start_update)
 
         for (x,y) in zip(self.info_res, num):
             tmplayout = QFormLayout()
             tmplayout.setFormAlignment(Qt.AlignJustify)
-            label1 = QLabel(x+' : ',self)
+            label1 = QLabel(self.tr(x+' : '),self)
             label1.setFont(self.ft)
             label1.setMinimumWidth(200)
             if x == 'data_usage':
@@ -88,12 +116,13 @@ class bwh_stat(QWidget):
             tmplayout.setRowWrapPolicy(QFormLayout.DontWrapRows)
             self.MainLayout.addLayout(tmplayout,Qt.AlignCenter)
             self.label_dict[x]=label2
+            self.text_dict[x]=label1
 
         num = range(0,len(self.live_res))
         for (x,y) in zip(self.live_res, num):
             tmplayout = QFormLayout()
             tmplayout.setFormAlignment(Qt.AlignJustify)
-            label1 = QLabel(x+' : ',self)
+            label1 = QLabel(self.tr(x+' : '),self)
             label1.setFont(self.ft)
             label1.setMinimumWidth(200)
             if x == 'disk_usage':
@@ -153,10 +182,13 @@ class bwh_stat(QWidget):
             tmplayout.setRowWrapPolicy(QFormLayout.DontWrapRows)
             self.MainLayout.addLayout(tmplayout,Qt.AlignCenter)
             self.label_dict[x]=label2
+            self.text_dict[x]=label1
         self.MainLayout.addLayout(self.res_layout,Qt.AlignCenter)
 
         self.MainLayout.addStretch(1)
         self.setLayout(self.MainLayout)
+        if self.trans == 1:
+            self.trans_label()
         self.show()
 
     def start_update(self):
@@ -166,7 +198,7 @@ class bwh_stat(QWidget):
         self.timer.start(10*1000)
         self.info_data = requests.get(self.info_url,headers=self.head,params=self.web_payload,timeout=500).json()
         self.live_data = requests.get(self.live_url,headers=self.head,params=self.web_payload,timeout=500).json()
-        self.status = self.live_data['ve_status'] 
+        self.status = self.live_data['ve_status']
         num = range(0,len(self.info_res))
         for (x,y) in zip(self.info_res, num):
             if x == 'data_usage':
@@ -183,7 +215,7 @@ class bwh_stat(QWidget):
                         self.label_dict[x].setStyleSheet('QProgressBar::chunk{background:rgb(255,0,51)}QProgressBar{text-align:center;}')
                 else:
                     self.label_dict[x].setValue(0)
-                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
+                    self.label_dict[x].setFormat('%s'%(self.tr('VPS Stopped')))
             elif x == 'ip_addresses':
                 self.label_dict[x].setText(str(self.info_data[x][0]))
             else :
@@ -204,7 +236,7 @@ class bwh_stat(QWidget):
                         self.label_dict[x].setStyleSheet('QProgressBar::chunk{background:rgb(255,0,51)}QProgressBar{text-align:center;}')
                 else:
                     self.label_dict[x].setValue(0)
-                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
+                    self.label_dict[x].setFormat('%s'%(self.tr('VPS Stopped')))
             elif x == 'ram_stat':
                 if self.status != 'Stopped':
                     self.ram_stat_value = int((float(self.live_data['plan_ram']/1024-self.live_data['mem_available_kb'])/float(self.live_data['plan_ram']/1024))*100)
@@ -219,12 +251,12 @@ class bwh_stat(QWidget):
                         self.label_dict[x].setStyleSheet('QProgressBar::chunk{background:rgb(255,0,51)}QProgressBar{text-align:center;}')
                 else:
                     self.label_dict[x].setValue(0)
-                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
+                    self.label_dict[x].setFormat('%s'%(self.te('VPS Stopped')))
             elif x == 'swap_stat':
                 if self.status != 'Stopped':
                     if self.live_data['swap_total_kb'] is None or self.live_data['swap_available_kb'] is None:
                         self.label_dict[x].setValue(0)
-                        self.label_dict[x].setFormat('%s'%('SWAP Unloaded'))
+                        self.label_dict[x].setFormat('%s'%(self.tr('SWAP Unloaded')))
                     else:
                         self.swap_stat_value = int( ((self.live_data['swap_total_kb'] - self.live_data['swap_available_kb']) /self.live_data['swap_total_kb'])*100 )
                         self.label_dict[x] .setValue(self.swap_stat_value)
@@ -237,12 +269,9 @@ class bwh_stat(QWidget):
                             self.label_dict[x].setStyleSheet('QProgressBar::chunk{background:rgb(255,0,51)}QProgressBar{text-align:center;}')
                 else:
                     self.label_dict[x].setValue(0)
-                    self.label_dict[x].setFormat('%s'%('VPS Stopped'))
+                    self.label_dict[x].setFormat('%s'%(self.te('VPS Stopped')))
             else:
                self.label_dict[x].setText(str(self.live_data[x]))
         self.update()
     def res_label_event(self):
         self.res_label.setVisible(False)
-
-
-

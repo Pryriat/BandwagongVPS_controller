@@ -25,21 +25,32 @@ head = {
         'Accept-Language': 'en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko',
 }
-app = QApplication(sys.argv)
-if os.path.exists("./data.ini") == False:
-    lo = login()
-    lo.show()
-    if lo.exec_() == QDialog.Accepted: 
-        pass
-    else:
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    trans = QTranslator()
+    trans.load("zh_CN")
+    app.installTranslator(trans)
+    if os.path.exists("./data.ini") == False:
+        lo = login()
+        lo.show()
+        if lo.exec_() == QDialog.Accepted:
+            pass
+        else:
+            sys.exit()
+    file = open("./data.ini",'rb')
+    data = file.read()
+    data = base64.b64decode(data)
+    try:
+        data = json.loads(data.decode())
+        web_payload= {'api_key':data['api'],'veid':data['veid']}
+        lan = data['lan']
+        file.close()
+    except:
+        file.close()
+        a = QMessageBox()
+        a.critical(a,"Error","stored data error,please restart appliacation to login again")
+        os.remove("./data.ini")
         sys.exit()
-file = open("./data.ini",'rb')
-data = file.read()
-data = base64.b64decode(data)
-data = json.loads(data.decode())
-web_payload= {'api_key':data['api'],'veid':data['veid']}
-file.close()
-ma = mainwindow(TAR,head,web_payload)
-ma.show()
-sys.exit(app.exec())
-
+    ma = mainwindow(TAR,head,web_payload,lan)
+    ma.show()
+    sys.exit(app.exec())
