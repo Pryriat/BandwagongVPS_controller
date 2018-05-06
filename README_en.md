@@ -15,10 +15,11 @@
 - basic root shell
 
 # Plan
-- ~~regularly data update~~（refresh button accomplished) 
-- reinstall OS
-- backup vps
-- multi-user
+- [x] auto data update
+- [x] translations
+- [ ] reinstall OS
+- [ ] backup vps
+- [ ] multi-user
 
 # Attention: for bandwagonhost VPS only
 
@@ -28,9 +29,9 @@
 
 # Screenshot
 ## login
-![](http://ozhtfx691.bkt.clouddn.com/FSQ$U%7B%5DEQ@5_CF%7BY%288%7DTTLC.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_lo_en.png)
 ## status
-![](http://ozhtfx691.bkt.clouddn.com/1522210984%281%29.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_en.png)
 ## basic control
-![](http://ozhtfx691.bkt.clouddn.com/1521791893%281%29.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_en.png)
 
