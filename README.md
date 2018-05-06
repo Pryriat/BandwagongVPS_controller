@@ -29,8 +29,8 @@
 
 # 截图
 ## 登陆界面
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_lo_en.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_lo_zh.png)
 ## VPS状态
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_en.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_zh.png)
 ## 基本控制
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_en.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_zh.png)
