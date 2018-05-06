@@ -26,7 +26,7 @@ class mainwindow(QWidget):
         self.tray.messageClicked.connect(self.showNormal)
         self.tray.show()
         self.bwh_stat = bwh_stat(TAR,head,web_payload,self.trans)
-        self.bwh_control =bwh_controls(TAR,head,web_payload)
+        self.bwh_control =bwh_controls(TAR,head,web_payload,self.trans)
         if self.trans == 0:
             self.tray.setToolTip(self.tr("IP : %s\nRAM : %s%%\nSwap : %s%% \nBandwidth : %s%% "%(self.bwh_stat.info_data['ip_addresses'][0],str(self.bwh_stat.ram_stat_value),\
                 str(self.bwh_stat.swap_stat_value),str(self.bwh_stat.data_usage_value))))

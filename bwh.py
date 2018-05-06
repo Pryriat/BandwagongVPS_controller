@@ -28,8 +28,6 @@ head = {
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     trans = QTranslator()
-    trans.load("zh_CN")
-    app.installTranslator(trans)
     if os.path.exists("./data.ini") == False:
         lo = login()
         lo.show()
@@ -51,6 +49,9 @@ if __name__ == '__main__':
         a.critical(a,"Error","stored data error,please restart appliacation to login again")
         os.remove("./data.ini")
         sys.exit()
+    if lan == 1:
+        trans.load("zh_CN")
+        app.installTranslator(trans)
     ma = mainwindow(TAR,head,web_payload,lan)
     ma.show()
     sys.exit(app.exec())

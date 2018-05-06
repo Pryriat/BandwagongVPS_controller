@@ -2,18 +2,21 @@ import urllib3
 import requests
 import time
 import PyQt5
+import base64
+import json
 from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 class bwh_controls(QWidget):
-    def __init__(self,TAR,head,web_payload):
+    def __init__(self,TAR,head,web_payload,trans):
         super().__init__()
         self.TAR = TAR
         self.head = head
         self.web_payload = web_payload
         self.timer = QTimer(self)
+        self.trans = trans
         self.initUI()
     def initUI(self):
         self.shell_url = self.TAR+'basicShell/exec'
@@ -38,6 +41,12 @@ class bwh_controls(QWidget):
         self.restart_lab.setVisible(False)
         self.shell_label = QLabel(self.tr("Basic shell"))
         self.shell_btn = QPushButton(self.tr("Send"))
+        self.lan_label = QLabel(self.tr("Language"))
+        self.lan_input = QComboBox()
+        self.lan_input.addItem("English")
+        self.lan_input.addItem("简体中文")
+        self.lan_input.setCurrentIndex(self.trans)
+        self.lan_btn = QPushButton(self.tr("Confirm"))
         self.shell_output = QTextEdit()
         self.shell_input = QLineEdit()
         self.shell_output.setReadOnly(True)
@@ -50,6 +59,9 @@ class bwh_controls(QWidget):
         self.lft_layout.setWidget(2,QFormLayout.FieldRole,self.kill_lab)
         self.lft_layout.setWidget(3,QFormLayout.LabelRole,self.restart_btn)
         self.lft_layout.setWidget(3,QFormLayout.FieldRole,self.restart_lab)
+        self.lft_layout.setWidget(4,QFormLayout.LabelRole,self.lan_label)
+        self.lft_layout.setWidget(4,QFormLayout.FieldRole,self.lan_input)
+        self.lft_layout.setWidget(5,QFormLayout.FieldRole,self.lan_btn)
         self.lft_layout.setRowWrapPolicy(QFormLayout.DontWrapRows)
 
         self.send_layout.addWidget(self.shell_input)
@@ -67,6 +79,7 @@ class bwh_controls(QWidget):
         self.stop_btn.clicked.connect(self.stop_event)
         self.kill_btn.clicked.connect(self.kill_event)
         self.shell_btn.clicked.connect(self.shell_event)
+        self.lan_btn.clicked.connect(self.lan_event)
 
         self.mainlayout.addLayout(self.lft_layout,0,0)
         self.mainlayout.addLayout(self.rht_layout,0,1)
@@ -121,5 +134,17 @@ class bwh_controls(QWidget):
             self.shell_output.insertPlainText(self.tr("Error!\n, Error_code : %d"%(data['error'])))
         self.shell_output.moveCursor(QTextCursor.End)
 
+    def lan_event(self):
+        file = open("./data.ini",'rb')
+        data = file.read()
+        data = base64.b64decode(data)
+        data = json.loads(data.decode())
+        re_data = base64.b64encode(json.dumps({'veid':data['veid'],'api':data['api'],'lan':self.lan_input.currentIndex()}).encode())
+        file.close()
+        file = open("./data.ini",'wb')
+        file.write(re_data)
+        file.close()
+        a = QMessageBox()
+        a.information(a,self.tr("Success"),self.tr("Language will be changed after resrart the application"))
     def label_event(self,label):
         label.setVisible(False)

@@ -37,11 +37,11 @@ class login(QDialog):
         self.btn.clicked.connect(self.login_event)
         self.ml.addWidget(self.btn)
         self.setLayout(self.ml)
-        self.resize(400,200)
+        self.resize(400,150)
 
      def login_event(self):
         self.file = open(".\data.ini",'wb')
-        self.data = base64.b64encode(json.dumps({'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan_input.currentIndex}).encode())
+        self.data = base64.b64encode(json.dumps({'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan_input.currentIndex()}).encode())
         global web_payload
         web_payload = {'veid':self.veid_input.text(),'api_key':self.api_input.text()}
         self.file.write(self.data)
