@@ -41,7 +41,7 @@ class mainwindow(QWidget):
             self.tray.setToolTip(self.tr("IP : %s\nRAM : %s%%\nSwap : %s%% \nBandwidth : %s%% "%(self.bwh_stat.info_data['ip_addresses'][0],str(self.bwh_stat.ram_stat_value),\
                 str(self.bwh_stat.swap_stat_value),str(self.bwh_stat.data_usage_value))))
         elif self.trans == 1:
-            self.tray.setToolTip(self.tr("IP地址 : %s\n内存 : %s%%\n交换分区 : %s%% \n带宽使用情况 : %s%% "%(self.bwh_stat.info_data['ip_addresses'][0],str(self.bwh_stat.ram_stat_value),\
+            self.tray.setToolTip(self.tr("IP地址 : %s\n内存 : %s%%\n交换分区 : %s%% \n流量使用情况 : %s%% "%(self.bwh_stat.info_data['ip_addresses'][0],str(self.bwh_stat.ram_stat_value),\
                 str(self.bwh_stat.swap_stat_value),str(self.bwh_stat.data_usage_value))))
 
         self.setWindowTitle(self.tr("bwh_contorler"))
