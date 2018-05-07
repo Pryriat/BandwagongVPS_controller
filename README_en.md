@@ -34,4 +34,6 @@
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_en.png)
 ## basic control
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_en.png)
+## trayicon
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_tp_en.png)
 
