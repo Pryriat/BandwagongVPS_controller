@@ -9,10 +9,10 @@ from PyQt5.QtCore import *
 
 class res_gui(QThread):
     '''重写线程类，负责开启新线程刷新控件'''
-     up = pyqtSignal()
-     def __int__(self):
+    up = pyqtSignal()
+    def __int__(self):
         super(WorkThread, self).__init__()
-     def run(self):
+    def run(self):
         self.up.emit()
 
 class bwh_stat(QWidget):

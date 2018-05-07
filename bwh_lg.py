@@ -14,7 +14,7 @@ from PyQt5.QtCore import *
 
 class login(QDialog):
     '''登陆窗体类，仅在本地无登陆信息文件时使用'''
-     def __init__(self, parent=None):
+    def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle(self.tr("Login"))
 
@@ -42,8 +42,8 @@ class login(QDialog):
         self.setLayout(self.ml)
         self.resize(400,150)
 
-     def login_event(self):
-         '''将登陆窗体的信息写入本地配置文件'''
+    def login_event(self):
+        '''将登陆窗体的信息写入本地配置文件'''
         self.file = open(".\data.ini",'wb')
         #使用base64编码防止明文存储
         self.data = base64.b64encode(json.dumps({'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan_input.currentIndex()}).encode())

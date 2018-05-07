@@ -163,7 +163,7 @@ class bwh_controls(QWidget):
         #更改语言配置并写入
         data['lan'] = self.lan_input.currentIndex()
         file = open("./data.ini",'wb')
-        file.write(data)
+        file.write(base64.b64encode(json.dumps(data).encode()))
         file.close()
         a = QMessageBox()
         #写入成功提示
