@@ -28,6 +28,8 @@ head = {
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     trans = QTranslator()
+
+    # 判断当前目录是否存在登陆数据
     if os.path.exists("./data.ini") == False:
         lo = login()
         lo.show()
@@ -35,6 +37,8 @@ if __name__ == '__main__':
             pass
         else:
             sys.exit()
+
+    #存在则读取登陆数据
     file = open("./data.ini",'rb')
     data = file.read()
     data = base64.b64decode(data)
@@ -49,9 +53,12 @@ if __name__ == '__main__':
         a.critical(a,"Error","stored data error,please restart appliacation to login again")
         os.remove("./data.ini")
         sys.exit()
+
+    #lan:0:English  1:简体中文
     if lan == 1:
         trans.load("zh_CN")
         app.installTranslator(trans)
+    
     ma = mainwindow(TAR,head,web_payload,lan)
     ma.show()
     sys.exit(app.exec())
