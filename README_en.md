@@ -19,7 +19,7 @@
 - [x] translations
 - [ ] reinstall OS
 - [ ] backup vps
-- [ ] multi-user
+- [x] multi-user
 
 # Attention: for bandwagonhost VPS only
 
