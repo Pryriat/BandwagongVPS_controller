@@ -19,6 +19,7 @@ class mainwindow(QWidget):
         super().__init__()
         self.tray = QSystemTrayIcon(self)#托盘类
         self.trans = trans
+        self.web_payload = web_payload
         #self.timer = QTimer(self)
         #self.timer.timeout.connect(self.warn)
         #self.timer.start(20*1000)
@@ -33,8 +34,8 @@ class mainwindow(QWidget):
         self.tray.messageClicked.connect(self.showNormal)
         self.tray.show()
 
-        self.bwh_stat = bwh_stat(TAR,head,web_payload,self.trans)#初始化信息窗体
-        self.bwh_control =bwh_controls(TAR,head,web_payload,self.trans)#初始化控制窗体
+        self.bwh_stat = bwh_stat(TAR,head,self.web_payload,self.trans)#初始化信息窗体
+        self.bwh_control =bwh_controls(self,TAR,head,self.web_payload,self.trans)#初始化控制窗体
 
         #根据trans的值改变输出内容
         if self.trans == 0:

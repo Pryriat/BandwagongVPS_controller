@@ -4,7 +4,9 @@ import time
 import PyQt5
 import base64
 import json
-from PyQt5.QtWidgets import *
+import linecache
+from bwh_add_host import bwh_add_host
+#from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -15,8 +17,9 @@ class bwh_controls(QWidget):
     参数说明：
     与主窗体类相同（参见bwh_ma.py)
     '''
-    def __init__(self,TAR,head,web_payload,trans):
+    def __init__(self,fa,TAR,head,web_payload,trans):
         super().__init__()
+        self.fa = fa
         self.TAR = TAR
         self.head = head
         self.web_payload = web_payload
@@ -61,11 +64,11 @@ class bwh_controls(QWidget):
         self.shell_input = QLineEdit()
         self.shell_output.setReadOnly(True)
         self.dual_host_view = QListWidget()
-        self.dual_host_edit = QPushButton(self.tr("edit"))
+        self.dual_host_delete = QPushButton(self.tr("delete"))
         self.dual_host_add = QPushButton(self.tr("add host"))
         self.dual_host_select = QPushButton(self.tr("select"))
-
-
+        self.current_host_label = QLabel(self.tr("current host:"))
+        self.current_host = QLabel()
 
         self.lft_layout.setWidget(0,QFormLayout.LabelRole,self.start_btn)
         self.lft_layout.setWidget(0,QFormLayout.FieldRole,self.start_lab)
@@ -78,11 +81,13 @@ class bwh_controls(QWidget):
         self.lft_layout.setWidget(4,QFormLayout.LabelRole,self.lan_label)
         self.lft_layout.setWidget(4,QFormLayout.FieldRole,self.lan_input)
         self.lft_layout.setWidget(5,QFormLayout.FieldRole,self.lan_btn)
+        self.lft_layout.setWidget(6,QFormLayout.LabelRole,self.current_host_label)
+        self.lft_layout.setWidget(6,QFormLayout.FieldRole,self.current_host)
         self.lft_layout.setRowWrapPolicy(QFormLayout.DontWrapRows)
 
         self.lft_down_layout.addWidget(self.dual_host_view,0,0,3,3)
         self.lft_down_layout.addWidget(self.dual_host_add,3,0,1,1)
-        self.lft_down_layout.addWidget(self.dual_host_edit,3,1,1,1)
+        self.lft_down_layout.addWidget(self.dual_host_delete,3,1,1,1)
         self.lft_down_layout.addWidget(self.dual_host_select,3,2,1,1)
         self.lft_main_layout.addLayout(self.lft_layout)
         self.lft_main_layout.addLayout(self.lft_down_layout)
@@ -103,11 +108,16 @@ class bwh_controls(QWidget):
         self.kill_btn.clicked.connect(self.kill_event)
         self.shell_btn.clicked.connect(self.shell_event)
         self.lan_btn.clicked.connect(self.lan_event)
+        self.dual_host_add.clicked.connect(self.dual_host_add_event)
+        self.dual_host_delete.clicked.connect(self.dual_host_delete_event)
+        self.dual_host_select.clicked.connect(self.dual_host_select_event)
 
         self.mainlayout.addLayout(self.lft_main_layout,0,0)
         self.mainlayout.addLayout(self.rht_layout,0,1)
 
         self.setLayout(self.mainlayout)
+        self.dual_host_view_update()
+
     def restart_event(self):
         '''重启VPS'''
         self.timer.timeout.connect(lambda:self.label_event(self.restart_lab))#QTimer与隐藏按钮的方法挂钩
@@ -169,21 +179,89 @@ class bwh_controls(QWidget):
     def lan_event(self):
         '''变更语言的方法'''
         #读取本地配置文件
-        file = open("./data.ini",'rb')
-        data = file.read()
-        data = base64.b64decode(data)
-        data = json.loads(data.decode())
-        #re_data = base64.b64encode(json.dumps({'veid':data['veid'],'api':data['api'],'lan':self.lan_input.currentIndex()}).encode())
-        file.close()
-        #更改语言配置并写入
-        data['lan'] = self.lan_input.currentIndex()
-        file = open("./data.ini",'wb')
-        file.write(base64.b64encode(json.dumps(data).encode()))
-        file.close()
+        num = 0
+        with open(".\data.ini",'rb') as f:
+            self.lan_data = f.readlines()
+        with open(".\data.ini",'wb') as f:
+            for line in self.lan_data:
+                if num == self.dual_host_view.currentRow() + 1:
+                    data = base64.b64decode(line)
+                    data = json.loads(data.decode())
+                    data['lan'] = self.lan_input.currentIndex()
+                    f.write(base64.b64encode(json.dumps(data).encode()))
+                    f.write('\n'.encode())
+                else:
+                    f.write(line)
+                num += 1
+
         a = QMessageBox()
         #写入成功提示
         a.information(a,self.tr("Success"),self.tr("Language will be changed after resrart the application"))
 
+
     def label_event(self,label):
         '''隐藏控件的方法'''
         label.setVisible(False)
+
+    def dual_host_view_update(self):
+        self.dual_host_view.clear()
+        self.file = open(".\data.ini",'rb')
+        fr = True
+        tmp_i = 0
+        for lines in self.file:
+            if fr:
+                self.dual_host_currentindex = int(base64.b64decode(lines).decode())
+                fr = False
+            else:
+                tmp_data = json.loads(base64.b64decode(lines).decode())
+                self.dual_host_view.addItem(tmp_data['name'])
+                if tmp_i == self.dual_host_currentindex:
+                    self.current_host.setText(tmp_data['name'])
+            tmp_i += 1
+        self.dual_host_view.setCurrentRow(self.dual_host_currentindex-1)
+        self.dual_host_view.update()
+
+
+    def dual_host_add_event(self):
+        if bwh_add_host(self.trans).exec_() == QDialog.Accepted:
+            self.dual_host_view_update()
+
+    def dual_host_delete_event(self):
+        num = 0
+        a = QMessageBox.warning(self,self.tr("Warning"),self.tr("host data will be deleted!"),QMessageBox.Yes|QMessageBox.No)
+        if a == QMessageBox.Yes:
+            with open(".\data.ini",'rb') as f:
+                self.tmp_data = f.readlines()
+            with open(".\data.ini",'wb') as f:
+                for line in self.tmp_data:
+                    if num == self.dual_host_view.currentRow() + 1:
+                        pass
+                    else:
+                        f.write(line)
+                    num += 1
+        self.dual_host_view_update()
+
+    def dual_host_select_event(self):
+        num = 0
+        with open(".\data.ini",'rb') as f:
+            self.tmp_data = f.readlines()
+        for x in self.tmp_data:
+            if num == self.dual_host_view.currentRow() + 1:
+                self.change_data = json.loads(base64.b64decode(x).decode())
+            else:
+                pass
+            num += 1
+
+        num = 0
+        with open(".\data.ini",'wb') as f:
+            for x in self.tmp_data:
+                if num == 0:
+                    f.write(base64.b64encode(str(self.dual_host_view.currentRow()+1).encode()))
+                    f.write('\n'.encode())
+                else:
+                    f.write(x)
+                num += 1
+
+        a = QMessageBox()
+        #写入成功提示
+        a.information(a,self.tr("Success"),self.tr("host will be changed after resrart the application"))
