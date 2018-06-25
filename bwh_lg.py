@@ -46,9 +46,11 @@ class login(QDialog):
         '''将登陆窗体的信息写入本地配置文件'''
         self.file = open(".\data.ini",'wb')
         #使用base64编码防止明文存储
-        self.data = base64.b64encode(json.dumps({'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan_input.currentIndex()}).encode())
+        self.data = base64.b64encode(json.dumps({'name':'新建主机','veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan_input.currentIndex()}).encode())
         global web_payload
         web_payload = {'veid':self.veid_input.text(),'api_key':self.api_input.text()}
+        self.file.write(base64.b64encode('1'.encode()))
+        self.file.write('\n'.encode())
         self.file.write(self.data)
         self.file.close()
         self.accept()

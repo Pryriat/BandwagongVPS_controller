@@ -27,6 +27,8 @@ class bwh_controls(QWidget):
         self.shell_url = self.TAR+'basicShell/exec'#shell API的URL
 
         #布局初始化
+        self.lft_main_layout = QVBoxLayout()
+        self.lft_down_layout = QGridLayout()
         self.lft_layout = QFormLayout()
         self.rht_layout = QVBoxLayout()
         self.send_layout = QHBoxLayout()
@@ -58,6 +60,12 @@ class bwh_controls(QWidget):
         self.shell_output = QTextEdit()
         self.shell_input = QLineEdit()
         self.shell_output.setReadOnly(True)
+        self.dual_host_view = QListWidget()
+        self.dual_host_edit = QPushButton(self.tr("edit"))
+        self.dual_host_add = QPushButton(self.tr("add host"))
+        self.dual_host_select = QPushButton(self.tr("select"))
+
+
 
         self.lft_layout.setWidget(0,QFormLayout.LabelRole,self.start_btn)
         self.lft_layout.setWidget(0,QFormLayout.FieldRole,self.start_lab)
@@ -71,6 +79,13 @@ class bwh_controls(QWidget):
         self.lft_layout.setWidget(4,QFormLayout.FieldRole,self.lan_input)
         self.lft_layout.setWidget(5,QFormLayout.FieldRole,self.lan_btn)
         self.lft_layout.setRowWrapPolicy(QFormLayout.DontWrapRows)
+
+        self.lft_down_layout.addWidget(self.dual_host_view,0,0,3,3)
+        self.lft_down_layout.addWidget(self.dual_host_add,3,0,1,1)
+        self.lft_down_layout.addWidget(self.dual_host_edit,3,1,1,1)
+        self.lft_down_layout.addWidget(self.dual_host_select,3,2,1,1)
+        self.lft_main_layout.addLayout(self.lft_layout)
+        self.lft_main_layout.addLayout(self.lft_down_layout)
 
         self.send_layout.addWidget(self.shell_input)
         self.send_layout.addWidget(self.shell_btn)
@@ -89,7 +104,7 @@ class bwh_controls(QWidget):
         self.shell_btn.clicked.connect(self.shell_event)
         self.lan_btn.clicked.connect(self.lan_event)
 
-        self.mainlayout.addLayout(self.lft_layout,0,0)
+        self.mainlayout.addLayout(self.lft_main_layout,0,0)
         self.mainlayout.addLayout(self.rht_layout,0,1)
 
         self.setLayout(self.mainlayout)

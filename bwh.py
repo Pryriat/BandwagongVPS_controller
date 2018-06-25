@@ -40,8 +40,18 @@ if __name__ == '__main__':
 
     #存在则读取登陆数据
     file = open("./data.ini",'rb')
-    data = file.read()
+    tmp_index = 0
+    current_index = 0
+    data = ''
+    for lines in file:
+        print(lines)
+        if tmp_index == 0:
+            current_index = int(base64.b64decode(lines.strip()))
+        elif tmp_index == current_index:
+            data = lines
+        tmp_index += 1
     data = base64.b64decode(data)
+    print(data)
     try:
         data = json.loads(data.decode())
         web_payload= {'api_key':data['api'],'veid':data['veid']}
@@ -58,7 +68,7 @@ if __name__ == '__main__':
     if lan == 1:
         trans.load("zh_CN")
         app.installTranslator(trans)
-    
+
     ma = mainwindow(TAR,head,web_payload,lan)
     ma.show()
     sys.exit(app.exec())
