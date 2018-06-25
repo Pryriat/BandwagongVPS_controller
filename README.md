@@ -19,7 +19,7 @@
 - [x] 翻译
 - [ ] 重装系统
 - [ ] 备份VPS
-- [ ] 多用户
+- [x] 多用户
 
 # 注意: 仅适用于 bandwagonhost VPS 
 
@@ -33,6 +33,6 @@
 ## VPS状态
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_zh.png)
 ## 基本控制
-![](http://ozhtfx691.bkt.clouddn.com/bwh_ct_zh.png)
+![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_zh.png)
 ## 最小化托盘
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_tp_zh.png)
