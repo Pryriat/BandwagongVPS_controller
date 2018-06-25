@@ -33,6 +33,6 @@
 ## VPS状态
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_zh.png)
 ## 基本控制
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_zh.png)
+![](http://ozhtfx691.bkt.clouddn.com/bwh_ct_zh.png)
 ## 最小化托盘
 ![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_tp_zh.png)
