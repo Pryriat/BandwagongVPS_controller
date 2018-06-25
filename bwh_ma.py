@@ -19,6 +19,8 @@ class mainwindow(QWidget):
         super().__init__()
         self.tray = QSystemTrayIcon(self)#托盘类
         self.trans = trans
+        self.icon = QIcon()
+        self.icon.addPixmap(QPixmap("final.ico"))
         self.web_payload = web_payload
         #self.timer = QTimer(self)
         #self.timer.timeout.connect(self.warn)
@@ -29,7 +31,8 @@ class mainwindow(QWidget):
         self.Tray_icon_menu.addAction(self.showAction)
         self.Tray_icon_menu.addAction(self.quitAction)
         self.tray.setContextMenu(self.Tray_icon_menu)
-        self.tray.setIcon(QIcon('final.ico' ))
+        self.tray.setIcon(self.icon)
+        self.setWindowIcon(self.icon)
         self.tray.activated.connect(self.db_cilcked)
         self.tray.messageClicked.connect(self.showNormal)
         self.tray.show()
