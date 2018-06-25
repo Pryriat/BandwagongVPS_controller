@@ -44,14 +44,12 @@ if __name__ == '__main__':
     current_index = 0
     data = ''
     for lines in file:
-        print(lines)
         if tmp_index == 0:
             current_index = int(base64.b64decode(lines.strip()))
         elif tmp_index == current_index:
             data = lines
         tmp_index += 1
     data = base64.b64decode(data)
-    print(data)
     try:
         data = json.loads(data.decode())
         web_payload= {'api_key':data['api'],'veid':data['veid']}
