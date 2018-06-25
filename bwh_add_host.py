@@ -39,14 +39,15 @@ class bwh_add_host(QDialog):
         self.btn.clicked.connect(self.bwh_add_event)
 
     def bwh_add_event(self):
+        self.ns = True
         if self.api_input.text() == '' or self.veid_input.text() == '':
             a = QMessageBox()
             a.critical(a,self.tr("Error","api or veid empty!"))
             self.close()
         elif self.name_input.text() == '':
             self.name_input.setText(self.tr("new host"))
-        self.file = open(".\data.ini",'ab')
-        self.data = base64.b64encode(json.dumps({'name':self.name_input.text(),'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan}).encode())
-        self.file.write('\n'.encode())
-        self.file.write(self.data)
+        with open('data.ini','ab') as f:
+            self.data = base64.b64encode(json.dumps({'name':self.name_input.text(),'veid':self.veid_input.text(),'api':self.api_input.text(),'lan':self.lan}).encode())
+            f.write('\n'.encode())
+            f.write(self.data)
         self.accept()

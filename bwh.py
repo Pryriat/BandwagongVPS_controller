@@ -44,8 +44,10 @@ if __name__ == '__main__':
     current_index = 0
     data = ''
     for lines in file:
+        if not len(lines.strip()):
+            continue
         if tmp_index == 0:
-            current_index = int(base64.b64decode(lines.strip()))
+            current_index = int(base64.b64decode(lines))
         elif tmp_index == current_index:
             data = lines
         tmp_index += 1

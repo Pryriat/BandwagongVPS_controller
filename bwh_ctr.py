@@ -209,6 +209,8 @@ class bwh_controls(QWidget):
         fr = True
         tmp_i = 0
         for lines in self.file:
+            if not len(lines.strip()):
+                continue
             if fr:
                 self.dual_host_currentindex = int(base64.b64decode(lines).decode())
                 fr = False
@@ -234,6 +236,8 @@ class bwh_controls(QWidget):
                 self.tmp_data = f.readlines()
             with open(".\data.ini",'wb') as f:
                 for line in self.tmp_data:
+                    if not len(line.strip()):
+                        pass
                     if num == self.dual_host_view.currentRow() + 1:
                         pass
                     else:
@@ -245,16 +249,10 @@ class bwh_controls(QWidget):
         num = 0
         with open(".\data.ini",'rb') as f:
             self.tmp_data = f.readlines()
-        for x in self.tmp_data:
-            if num == self.dual_host_view.currentRow() + 1:
-                self.change_data = json.loads(base64.b64decode(x).decode())
-            else:
-                pass
-            num += 1
-
-        num = 0
         with open(".\data.ini",'wb') as f:
             for x in self.tmp_data:
+                if not len(x.strip()):
+                    pass
                 if num == 0:
                     f.write(base64.b64encode(str(self.dual_host_view.currentRow()+1).encode()))
                     f.write('\n'.encode())
