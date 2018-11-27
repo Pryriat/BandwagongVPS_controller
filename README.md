@@ -25,14 +25,14 @@
 
 # 提示
 - 从VPS的KiwiVM网络控制台获取VEID 和API_KEY 
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/@3RWGK_PXXT2F7$3BRZ%28XAJ.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/@3RWGK_PXXT2F7$3BRZ%28XAJ.png)
 
 # 截图
 ## 登陆界面
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_lo_zh.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_lo_zh.png)
 ## VPS状态
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_zh.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_st_zh.png)
 ## 基本控制
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_zh.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_ct_zh.png)
 ## 最小化托盘
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_tp_zh.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_tp_zh.png)
