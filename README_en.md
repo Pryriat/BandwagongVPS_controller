@@ -25,15 +25,15 @@
 
 # Tips
 - Get VEID and API_KEY from KiwiVM
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/@3RWGK_PXXT2F7$3BRZ%28XAJ.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/@3RWGK_PXXT2F7$3BRZ%28XAJ.png)
 
 # Screenshot
 ## login
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_lo_en.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_lo_en.png)
 ## status
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_st_en.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_st_en.png)
 ## basic control
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_ct_en.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_ct_en.png)
 ## trayicon
-![](http://ozhtfx691.bkt.clouddn.com//bandwagong/bwh_tp_en.png)
+![](https://tinytracer-1256246079.cos.ap-guangzhou.myqcloud.com/bandwagong/bwh_tp_en.png)
 
